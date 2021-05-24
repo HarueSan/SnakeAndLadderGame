@@ -47,7 +47,7 @@ def main():
     for snake in snakes :
         board.add_snake(snake)
     
-    player = Player("red")
+    player = Player()
     game = Game(player, board)
     game.start()
     
