@@ -1,5 +1,5 @@
 class Player:
 
     def __init__(self) -> None:
-        self.position = 0
+        self.position = 1
     

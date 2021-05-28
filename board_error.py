@@ -1,0 +1,3 @@
+class BoardExceptionError(Exception):
+        pass
+        

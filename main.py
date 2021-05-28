@@ -39,14 +39,11 @@ def main():
     snakes = read_snakes(snake_file)
     ladders = read_ladders(ladder_file)
 
-    board = Board(100)
-    
-    for ladder in ladders :
-        board.add_ladder(ladder)
-    
-    for snake in snakes :
-        board.add_snake(snake)
-    
+    board_size = 100
+    finish_line = 100
+
+    board = Board(board_size, finish_line, ladders, snakes)
+   
     player = Player()
     game = Game(player, board)
     game.start()
