@@ -1,3 +1,4 @@
+# use Pycharm format
 from typing import List
 from board import Board
 from snake import Snake
@@ -5,11 +6,12 @@ from ladder import Ladder
 from player import Player
 from game import Game
 
+
 def read_snakes(filename) -> List[Snake]:
     file = open(filename)
     snakes = []
 
-    for line in file :
+    for line in file:
         snake_values = line.split()
         head = int(snake_values[0])
         tail = int(snake_values[1])
@@ -19,11 +21,12 @@ def read_snakes(filename) -> List[Snake]:
 
     return snakes
 
-def read_ladders(filename) -> List[Ladder] :
+
+def read_ladders(filename) -> List[Ladder]:
     file = open(filename)
     ladders = []
 
-    for line in file :
+    for line in file:
         ladder_values = line.split()
         start = int(ladder_values[0])
         end = int(ladder_values[1])
@@ -32,6 +35,7 @@ def read_ladders(filename) -> List[Ladder] :
     file.close()
 
     return ladders
+
 
 def main():
     snake_file = 'snakes.txt'
@@ -43,11 +47,11 @@ def main():
     finish_line = 100
 
     board = Board(board_size, finish_line, ladders, snakes)
-   
+
     player = Player()
     game = Game(player, board)
     game.start()
-    
-if __name__ == "__main__" :
+
+
+if __name__ == "__main__":
     main()
-    

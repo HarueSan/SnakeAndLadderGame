@@ -1,17 +1,26 @@
+from error import *
+
+
 class Ladder:
 
     def __init__(self, start: int, end: int) -> None:
+        self.validate(start, end)
         self.start = start
         self.end = end
 
     # debug
-    def __repr__(self):
+    def __repr__(self) -> None:
         return f"start:<{self.start}, end:<{self.end}>"
-    
-    def validate_ladder(self):
-        # จุดเริ่มต้นต้องน้อยกว่าจุดสิ้นสุด
-        # จุดสิ้นสุดต้องมากกว่าจุดเริ่มต้น
-        # จุดเริ่มต้นบรรไดต้องมากกว่าจุดหนึ่ง
-        # ตัวเลขต้องเป็นจำนวนเต็มบวกที่มากกว่าหนึ่ง
-        # ของน้องบาสเขียนให้กำหนดจุดเริ่มต้นทีหลังได้
 
+    def validate(self, start: int, end: int) -> None:
+        if start == end:
+            raise PositionLadderError("Start ladder equal end ladder")
+
+        elif start > end:
+            raise PositionLadderError("Start ladder more than end ladder")
+
+        elif start == 1 or end == 1:
+            raise PositionLadderError("Start ladder or end ladder equal start point ")
+
+        elif start < 1 or end < 1:
+            raise InvalidInputError("Negative number or zero")
