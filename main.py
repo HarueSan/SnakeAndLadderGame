@@ -1,4 +1,4 @@
-# use Pycharm format
+# use PyCharm format
 from typing import List
 from board import Board
 from snake import Snake
@@ -44,13 +44,14 @@ def main():
     ladders = read_ladders(ladder_file)
 
     board_size = 100
+    start_point = 1
     finish_line = 100
 
-    board = Board(board_size, finish_line, ladders, snakes)
-
+    board = Board(start_point, board_size, finish_line, ladders, snakes)
     player = Player()
     game = Game(player, board)
-    game.start()
+
+    game.play()
 
 
 if __name__ == "__main__":

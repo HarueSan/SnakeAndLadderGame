@@ -1,4 +1,4 @@
-from error import *
+from ladder_error import *
 
 
 class Ladder:
@@ -9,18 +9,17 @@ class Ladder:
         self.end = end
 
     # debug
-    def __repr__(self) -> None:
+    def __repr__(self) -> str:
         return f"start:<{self.start}, end:<{self.end}>"
 
-    def validate(self, start: int, end: int) -> None:
+    def validate_start_ladder_equal_end_ladder(self, start, end) -> None:
         if start == end:
-            raise PositionLadderError("Start ladder equal end ladder")
+            raise StartLadderEqualEndLadder(self)
 
-        elif start > end:
-            raise PositionLadderError("Start ladder more than end ladder")
+    def validate_start_ladder_over_end_ladder(self, start, end) -> None:
+        if start > end:
+            raise StartLadderOverEndLadder(self)
 
-        elif start == 1 or end == 1:
-            raise PositionLadderError("Start ladder or end ladder equal start point ")
-
-        elif start < 1 or end < 1:
-            raise InvalidInputError("Negative number or zero")
+    def validate(self, start: int, end: int) -> None:
+        self.validate_start_ladder_equal_end_ladder(start, end)
+        self.validate_start_ladder_over_end_ladder(start, end)

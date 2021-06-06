@@ -1,26 +1,25 @@
-from error import *
+from snake_error import *
 
 
 class Snake:
     
     def __init__(self, head: int, tail: int) -> None:
-        self.validate_snake(head, tail)
+        self.validate(head, tail)
         self.head = head
         self.tail = tail
     
     # debug
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"head:<{self.head}, tail:<{self.tail}>"
 
-    def validate_snake(self, head: int, tail: int) -> None:
+    def validate_head_less_than_tail(self, head: int, tail: int) -> None:
         if head < tail:
-            raise PositionSnakeError("Head snake less than tail snake")
+            raise HeadSnakeLessThanTailSnake(self)
 
-        elif head == tail:
-            raise PositionSnakeError("Head snake equal tail snake")
+    def validate_head_equal_tail(self, head: int, tail: int) -> None:
+        if head == tail:
+            raise HeadSnakeEqualTailSnake(self)
 
-        elif head == 1 or tail == 1:
-            raise PositionSnakeError("Head snake or tail snake equal start point")
-
-        elif head < 1 or tail < 1:
-            raise InvalidInputError("Negative number or zero")
+    def validate(self, head: int, tail: int) -> None:
+        self.validate_head_less_than_tail(head, tail)
+        self.validate_head_equal_tail(head, tail)
