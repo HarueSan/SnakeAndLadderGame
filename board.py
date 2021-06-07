@@ -14,8 +14,10 @@ class Board:
         self.finish_line = finish_line
         self.ladders: List[Ladder] = []
         self.snakes: List[Snake] = []
+        self.assign_snake(snakes)
+        self.assign_ladder(ladder)
 
-        # TODO: รอคุยกับพี่จีนส์
+    def assign_snake(self, snakes: List[Snake]):
         for snake in snakes:
             try:
                 self.add_snake(snake)
@@ -23,6 +25,7 @@ class Board:
             except BoardAddSnakeError:
                 pass
 
+    def assign_ladder(self, ladders: List[Ladder]):
         for ladder in ladders:
             try:
                 self.add_ladder(ladder)
@@ -70,10 +73,16 @@ class Board:
     def is_ladder_start_equal_finish_line(self, ladder: Ladder) -> bool:
         return ladder.start == self.finish_line
 
-    def is_ladder_chain(self, ladder: Ladder):
+    def is_ladder_chain(self, ladder: Ladder) -> bool:
         return (
-                self.is_ladder_chain_ladder(ladder)
-                or self.is_ladder_start_chain_snake(ladder)
+                    self.is_ladder_chain_ladder(ladder)
+                    or self.is_ladder_start_chain_snake(ladder)
+                )
+
+    def is_snake_chain(self, snake: Snake) -> bool:
+        return (
+                    self.is_snake_chain_snake(snake)
+                    or self.is_snake_head_chain_ladder(snake)
                 )
 
     def get_snake_at_position(self, player_current_position: int) -> Optional[Snake]:
@@ -86,42 +95,45 @@ class Board:
 
         return next(ladder, None)
 
+    def is_snake_equal_start_point(self, snake: Snake) -> bool:
+        return snake.head == self.start_point
+
+    def is_snake_below_start_point(self, snake: Snake) -> bool:
+        return (
+                    snake.head < self.start_point
+                    or snake.tail < self.start_point
+                )
+
     def validate_snake(self, snake: Snake) -> None:
-        if snake.head == self.start_point:
-            raise HeadEqualStartPoint(self)
-
-        if \
-                snake.head < self.start_point \
-                or snake.tail < self.start_point\
-                :
-            raise SnakeSyntaxInputError(self)
-
         if\
-                self.is_snake_chain_snake(snake)\
-                or self.is_snake_head_chain_ladder(snake)\
+                self.is_snake_chain(snake)\
                 or self.is_snake_head_over_board_size(snake)\
                 or self.is_snake_tail_over_board_size(snake)\
+                or self.is_ladder_equal_start_point(snake)\
+                or self.is_ladder_below_start_point(snake)\
                 :
             raise BoardAddLadderError("Cannot add snake")
 
+    def is_ladder_equal_start_point(self, ladder: Ladder) -> bool:
+        return (
+                    ladder.start == self.start_point
+                    or ladder.end == self.start_point
+                )
+
+    def is_ladder_below_start_point(self, ladder) -> bool:
+        return (
+                    ladder.start < self.start_point
+                    or ladder.end < self.start_point
+                )
+
     def validate_ladder(self, ladder: Ladder) -> None:
-        if \
-                ladder.start == self.start_point \
-                or ladder.end == self.start_point\
-                :
-            raise StartLadderOrEndLadderEqualStartPoint(ladder)
-
-        if \
-                ladder.start < self.start_point \
-                or ladder.end < self.start_point\
-                :
-            raise LadderSyntaxInputError(ladder)
-
         if\
                 self.is_ladder_chain(ladder)\
                 or self.is_ladder_start_over_board_size(ladder)\
                 or self.is_ladder_end_over_board_size(ladder)\
                 or self.is_ladder_start_equal_board_size(ladder)\
                 or self.is_ladder_start_equal_finish_line(ladder)\
+                or self.is_ladder_equal_start_point(ladder)\
+                or self.is_ladder_below_start_point(ladder)\
                 :
             raise BoardAddLadderError("Cannot add ladder")
