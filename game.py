@@ -9,18 +9,16 @@ class Game:
     def __init__(self, player: Player, board: Board) -> None:
         self.board = board
         self.player = player
-        board.set_player_position_at_start_point(player)
+        self.player.position = board.start_point
 
     def is_finish_game(self) -> bool:
         return self.player.position >= self.board.finish_line
 
     def play(self) -> None:
-        answer = True
-
         print("*****Game start*****")
         print(f"Your first position is {self.player.position}\n")
 
-        while answer and not self.is_finish_game():
+        while True:
             dice_number = self.random_dice_number()
 
             print(f"The dice number is {dice_number}")
@@ -33,38 +31,26 @@ class Game:
             elif self.is_snake_head():
                 print("Unlucky!! You were bitten by snake")
                 self.move_player_to_snake_tail()
-            
+
             print(f"Your current position is {self.player.position}\n")
-            answer = self.get_new_answer()
+
+            if self.is_finish_game():
+                break
+
+            if not self.is_continue():
+                break
 
         print("end game")
 
-    def is_continue(self) -> Union[bool, int]:
-        answer = input("Continue play game? y/n: ")
-        wrong_answer = -1
+    def is_continue(self) -> bool:
+        while True:
+            answer = input("Continue play game? y/n: ")
 
-        if answer == 'y' or answer == 'Y':
-            return True
+            if answer == 'y' or answer == 'Y':
+                return True
 
-        elif answer == 'n' or answer == 'N':
-            return False
-
-        else:
-            return wrong_answer
-
-    def get_answer(self) -> str:
-        answer = input("Continue play game? y/n: ")
-
-        return answer
-
-    def get_new_answer(self) -> bool:
-        wrong_answer = -1
-        answer = wrong_answer
-
-        while answer == wrong_answer:
-                answer = self.is_continue()
-
-        return answer
+            elif answer == 'n' or answer == 'N':
+                return False
 
     def random_dice_number(self) -> int:
         return randint(1, 6)
