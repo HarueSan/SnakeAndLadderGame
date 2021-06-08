@@ -15,7 +15,7 @@ class Board:
         self.ladders: List[Ladder] = []
         self.snakes: List[Snake] = []
         self.assign_snake(snakes)
-        self.assign_ladder(ladder)
+        self.assign_ladder(ladders)
 
     def assign_snake(self, snakes: List[Snake]):
         for snake in snakes:
@@ -89,8 +89,8 @@ class Board:
                 self.is_snake_chain_snake(snake)\
                 or self.is_snake_head_chain_ladder(snake)\
                 or self.is_snake_over_board_size(snake)\
-                or self.is_ladder_equal_start_point(snake)\
-                or self.is_ladder_below_start_point(snake)\
+                or self.is_snake_equal_start_point(snake)\
+                or self.is_snake_below_start_point(snake)\
                 :
             raise BoardAddLadderError("Cannot add snake")
 

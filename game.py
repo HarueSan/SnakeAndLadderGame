@@ -11,9 +11,6 @@ class Game:
         self.player = player
         self.player.position = board.start_point
 
-    def is_finish_game(self) -> bool:
-        return self.player.position >= self.board.finish_line
-
     def play(self) -> None:
         print("*****Game start*****")
         print(f"Your first position is {self.player.position}\n")
@@ -41,6 +38,9 @@ class Game:
                 break
 
         print("end game")
+
+    def is_finish_game(self) -> bool:
+        return self.player.position >= self.board.finish_line
 
     def is_continue(self) -> bool:
         while True:
