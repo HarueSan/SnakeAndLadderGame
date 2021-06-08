@@ -1,50 +1,54 @@
 from player import Player
 from board import Board
 from random import randint
-from typing import Union
+from typing import Union, List
 
 
 class Game:
 
-    def __init__(self, player: Player, board: Board) -> None:
+    def __init__(self, players: List[Player], board: Board) -> None:
         self.board = board
-        self.player = player
-        self.player.position = board.start_point
+        self.players: List[Player] = players
+
+        for player in self.players:
+            self.set_player_at_first_position(player)
+
+    def set_player_at_first_position(self, player: Player) -> None:
+        player.position = self.board.start_point
 
     def play(self) -> None:
-        print("*****Game start*****")
-        print(f"Your first position is {self.player.position}\n")
+        anyone_win = False
+        players = self.players.copy()
 
+        while not anyone_win and len(players) > 0:
+            for player in players:
+                if self.is_continue(player):
+                    dice_number = self.random_dice_number()
+
+                    print(f"{player.name} dice number: {dice_number}")
+                    self.move_forward(dice_number, player)
+
+                    if self.is_ladder_start(player):
+                        self.move_to_ladder_end(player)
+
+                    if self.is_snake_head(player):
+                        self.move_to_snake_tail(player)
+
+                    print(f"{player.name} position: {player.position}")
+
+                    if self.is_win(player):
+                        anyone_win = True
+                        print(f"{player.name} win!")
+                        break
+                else:
+                    players.remove(player)
+
+    def is_win(self, player: Player) -> bool:
+        return player.position >= self.board.finish_line
+
+    def is_continue(self, player: Player) -> bool:
         while True:
-            dice_number = self.random_dice_number()
-
-            print(f"The dice number is {dice_number}")
-            self.move_player_forward(dice_number)
-        
-            if self.is_ladder_start():
-                print("Lucky!! You found ladder")
-                self.move_player_to_ladder_end()
-
-            elif self.is_snake_head():
-                print("Unlucky!! You were bitten by snake")
-                self.move_player_to_snake_tail()
-
-            print(f"Your current position is {self.player.position}\n")
-
-            if self.is_finish_game():
-                break
-
-            if not self.is_continue():
-                break
-
-        print("end game")
-
-    def is_finish_game(self) -> bool:
-        return self.player.position >= self.board.finish_line
-
-    def is_continue(self) -> bool:
-        while True:
-            answer = input("Continue play game? y/n: ")
+            answer = input(f"{player.name} continue? y/n: ")
 
             if answer == 'y' or answer == 'Y':
                 return True
@@ -55,19 +59,19 @@ class Game:
     def random_dice_number(self) -> int:
         return randint(1, 6)
 
-    def move_player_forward(self, dice_number: int) -> None:
-        self.player.position += dice_number
+    def move_forward(self, dice_number: int, player: Player) -> None:
+        player.position += dice_number
 
-    def move_player_to_snake_tail(self) -> None:
-        snake = self.board.get_snake_at_position(self.player.position)
-        self.player.position = snake.tail
+    def move_to_snake_tail(self, player: Player) -> None:
+        snake = self.board.get_snake_at_position(player.position)
+        player.position = snake.tail
 
-    def move_player_to_ladder_end(self) -> None:
-        ladder = self.board.get_ladder_at_position(self.player.position)
-        self.player.position = ladder.end
+    def move_to_ladder_end(self, player: Player) -> None:
+        ladder = self.board.get_ladder_at_position(player.position)
+        player.position = ladder.end
 
-    def is_snake_head(self) -> bool:
-        return bool(self.board.get_snake_at_position(self.player.position))
+    def is_snake_head(self, player: Player) -> bool:
+        return bool(self.board.get_snake_at_position(player.position))
 
-    def is_ladder_start(self) -> bool:
-        return bool(self.board.get_ladder_at_position(self.player.position))
+    def is_ladder_start(self, player: Player) -> bool:
+        return bool(self.board.get_ladder_at_position(player.position))

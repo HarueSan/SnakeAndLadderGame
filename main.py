@@ -37,19 +37,34 @@ def read_ladders(filename) -> List[Ladder]:
     return ladders
 
 
+def read_players(filename) -> List[Player]:
+    file = open(filename)
+    players = []
+
+    for line in file:
+        player_values = line.split()
+        player_name = player_values[0]
+        players.append(Player(player_name))
+
+    file.close()
+
+    return players
+
+
 def main():
     snake_file = 'snakes.txt'
     ladder_file = 'ladders.txt'
+    players_file = 'players.txt'
     snakes = read_snakes(snake_file)
     ladders = read_ladders(ladder_file)
+    players = read_players(players_file)
 
     board_size = 100
     start_point = 1
     finish_line = 100
 
     board = Board(start_point, board_size, finish_line, ladders, snakes)
-    player = Player()
-    game = Game(player, board)
+    game = Game(players, board)
 
     game.play()
 
