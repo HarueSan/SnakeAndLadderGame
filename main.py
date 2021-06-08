@@ -46,7 +46,6 @@ def main():
     board_size = 100
     start_point = 1
     finish_line = 100
-    player_name = "red"
 
     board = Board(start_point, board_size, finish_line, ladders, snakes)
     player = Player(player_name)
