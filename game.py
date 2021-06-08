@@ -9,12 +9,11 @@ class Game:
     def __init__(self, players: List[Player], board: Board) -> None:
         self.board = board
         self.players: List[Player] = players
+        self.set_players_at_start_point(self.players)
 
-        for player in self.players:
-            self.set_player_at_first_position(player)
-
-    def set_player_at_first_position(self, player: Player) -> None:
-        player.position = self.board.start_point
+    def set_players_at_start_point(self, players: List[Player]) -> None:
+        for player in players:
+            player.position = self.board.start_point
 
     def play(self) -> None:
         anyone_win = False
