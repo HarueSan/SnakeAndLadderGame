@@ -48,7 +48,7 @@ def main():
     finish_line = 100
 
     board = Board(start_point, board_size, finish_line, ladders, snakes)
-    player = Player(player_name)
+    player = Player()
     game = Game(player, board)
 
     game.play()
