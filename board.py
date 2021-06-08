@@ -14,8 +14,8 @@ class Board:
         self.finish_line = finish_line
         self.ladders: List[Ladder] = []
         self.snakes: List[Snake] = []
-        self.assign_snake(snakes)
         self.assign_ladder(ladders)
+        self.assign_snake(snakes)
 
     def assign_snake(self, snakes: List[Snake]):
         for snake in snakes:
@@ -50,7 +50,7 @@ class Board:
                                           old_ladder.end == ladder.start, self.ladders))
 
     def is_snake_head_chain_ladder(self, snake: Snake) -> bool:
-        return any(map(lambda ladder: ladder.play == snake.head, self.ladders))
+        return any(map(lambda ladder: ladder.start == snake.head, self.ladders))
 
     def is_ladder_start_chain_snake(self, ladder: Ladder) -> bool:
         return any(map(lambda snake: snake.head == ladder.start, self.snakes))
