@@ -18,8 +18,9 @@ class Game:
     def play(self) -> None:
         anyone_win = False
         players = self.players.copy()
+        player_more_than_zero = lambda: len(players) > 0
 
-        while not anyone_win and len(players) > 0:
+        while not anyone_win and player_more_than_zero():
             for player in players:
                 if self.is_continue(player):
                     dice_number = self.random_dice_number()
